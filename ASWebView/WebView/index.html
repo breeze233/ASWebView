@@ -29,37 +29,10 @@
         window.webkit.messageHandlers.NativeMethod.postMessage(dict);
                         
         };
-        function nativeGetUserId() {
-            
-            window.webkit.messageHandlers.NativeMethod.postMessage('get_userId');
-            
-        };
-        function nativeGetToken() {
-            
-            window.webkit.messageHandlers.NativeMethod.postMessage('get_token');
-            
-        };
-        function nativeIsGetData() {
-            
-            var msg = localStorage.getItem("userId");
-            
-            if(msg){
-                alert("data字段中的值为：" + msg);
-            }else{
-                alert("data字段无值！");
-            }
-            
-        };
         function nativeLocalStorageClear() {
             
             localStorage.clear()
             alert("已完成移除操作");
-            
-        }
-        
-        function nativelogin() {
-            
-            window.webkit.messageHandlers.NativeMethod.postMessage('jump_login');
             
         }
             </script>
@@ -70,25 +43,13 @@
 
         <div>
                 <button  class="close" onClick = "nativeClose()">
-                        关闭
+                    关闭
                 </button>
                 <button  class="close" onClick = "nativeshard()">
                     分享
                 </button>
-                <button  class="close" onClick = "nativeGetUserId()">
-                    获取UserID
-                </button>
-                <button  class="close" onClick = "nativeGetToken()">
-                    获取Token
-                </button>
-                <button  class="close" onClick = "nativeIsGetData()">
-                    是否成功
-                </button>
                 <button  class="close" onClick = "nativeLocalStorageClear()">
                     清除LocalStorage
-                </button>
-                <button  class="close" onClick = "nativelogin()">
-                    登录
                 </button>
     </body>
 

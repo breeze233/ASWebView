@@ -14,6 +14,9 @@
 		1A3136FA20107E38004D5E10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A3136F820107E38004D5E10 /* LaunchScreen.storyboard */; };
 		1A31370520107E39004D5E10 /* ASWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A31370420107E39004D5E10 /* ASWebViewTests.swift */; };
 		1A31371020107E39004D5E10 /* ASWebViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A31370F20107E39004D5E10 /* ASWebViewUITests.swift */; };
+		1A31372020107E6C004D5E10 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1A31371E20107E6C004D5E10 /* index.html */; };
+		1A31372120107E6C004D5E10 /* ASWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A31371F20107E6C004D5E10 /* ASWebViewController.swift */; };
+		1AFA03802011A04F00887F19 /* ASWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA037F2011A04F00887F19 /* ASWebViewController.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,9 @@
 		1A31370B20107E39004D5E10 /* ASWebViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASWebViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A31370F20107E39004D5E10 /* ASWebViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASWebViewUITests.swift; sourceTree = "<group>"; };
 		1A31371120107E39004D5E10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A31371E20107E6C004D5E10 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		1A31371F20107E6C004D5E10 /* ASWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASWebViewController.swift; sourceTree = "<group>"; };
+		1AFA037F2011A04F00887F19 /* ASWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ASWebViewController.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +103,7 @@
 		1A3136EE20107E38004D5E10 /* ASWebView */ = {
 			isa = PBXGroup;
 			children = (
+				1A31371D20107E6C004D5E10 /* WebView */,
 				1A3136EF20107E38004D5E10 /* AppDelegate.swift */,
 				1A3136F120107E38004D5E10 /* ViewController.swift */,
 				1A3136F320107E38004D5E10 /* Main.storyboard */,
@@ -123,6 +130,16 @@
 				1A31371120107E39004D5E10 /* Info.plist */,
 			);
 			path = ASWebViewUITests;
+			sourceTree = "<group>";
+		};
+		1A31371D20107E6C004D5E10 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				1AFA037F2011A04F00887F19 /* ASWebViewController.bundle */,
+				1A31371E20107E6C004D5E10 /* index.html */,
+				1A31371F20107E6C004D5E10 /* ASWebViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +250,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A3136FA20107E38004D5E10 /* LaunchScreen.storyboard in Resources */,
+				1A31372020107E6C004D5E10 /* index.html in Resources */,
 				1A3136F720107E38004D5E10 /* Assets.xcassets in Resources */,
+				1AFA03802011A04F00887F19 /* ASWebViewController.bundle in Resources */,
 				1A3136F520107E38004D5E10 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A3136F220107E38004D5E10 /* ViewController.swift in Sources */,
+				1A31372120107E6C004D5E10 /* ASWebViewController.swift in Sources */,
 				1A3136F020107E38004D5E10 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,11 +448,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ASWebView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ASProject.ASWebView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -442,11 +463,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ASWebView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ASProject.ASWebView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

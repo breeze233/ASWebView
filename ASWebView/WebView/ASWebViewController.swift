@@ -20,33 +20,57 @@ class ASWebViewController: UIViewController{
     var  loadType:WebLoadType!
     var URLString:String!
     var PostData:String!
+    var addBottomSafeSpace:Bool! =  false // iphone X 底物 safe 区域添加空白
+    
     
     lazy var webView:WKWebView = {
         () -> WKWebView in
         
         let Configuration = WKWebViewConfiguration()
-        Configuration.allowsAirPlayForMediaPlayback = true
-        Configuration.allowsPictureInPictureMediaPlayback = true
         Configuration.allowsInlineMediaPlayback = true// 允许在线播放
         Configuration.processPool = WKProcessPool()// web内容处理池
         Configuration.suppressesIncrementalRendering = true// 是否支持记忆读取
- 
-        let safeHeight = CGFloat(UIScreen.main.bounds.height == 812.0 ? 88.0 : 64.0)
-        let safeBottom = CGFloat(UIScreen.main.bounds.height == 812.0 ? 34.0 : 0.0)
-        let webView = WKWebView(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: self.view.bounds.size.height - safeHeight), configuration: Configuration)
-        if UIScreen.main.bounds.height == 812.0 {
-            webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, safeBottom, 0)
-            let blackView = UIImageView(frame: CGRect(x: 0, y: self.view.bounds.size.height - safeHeight - safeBottom, width: UIScreen.main.bounds.size.width, height: safeBottom))
-            blackView.backgroundColor = UIColor.white
-            webView.addSubview(blackView)
+        Configuration.mediaPlaybackAllowsAirPlay = true
+        if #available(iOS 9.0, *) {
+            Configuration.allowsAirPlayForMediaPlayback = true
+            Configuration.allowsPictureInPictureMediaPlayback = true
         }
         
+        var navigationHeight:CGFloat = UIScreen.main.bounds.height == 812.0 ? 88.0 : 64.0
+        var fixTopSpace:CGFloat = navigationHeight
+        
+        if self.navigationController?.navigationBar.isTranslucent == false {
+            navigationHeight = 0.0
+        }
+        
+        let webView = WKWebView(frame:CGRect(x: 0, y: navigationHeight, width: UIScreen.main.bounds.size.width, height: self.view.bounds.size.height - fixTopSpace), configuration: Configuration)
+
+        if UIScreen.main.bounds.height == 812.0 && addBottomSafeSpace { // 是否需要 iphoneX 底部安全区域空白
+            let safeBottom:CGFloat = UIScreen.main.bounds.height == 812.0 ? 34.0 : 0.0
+            webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, safeBottom, 0)
+            
+            let bottomBlackView = UIImageView(frame: CGRect(x: 0, y: self.view.bounds.size.height - navigationHeight - safeBottom, width: UIScreen.main.bounds.size.width, height: safeBottom))
+            bottomBlackView.backgroundColor = UIColor.white
+            webView.addSubview(bottomBlackView)
+        }
+        
+        // 顶部 空白试图 （为了好看）
+        let topBlackView = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: fixTopSpace))
+        topBlackView.backgroundColor = UIColor.white
+        self.view.insertSubview(topBlackView, at: 0)
+        
+        //js 注入 
         webView.configuration.userContentController.add(WeakScriptMessageDelegate(delegate: self), name: "NativeMethod")
+        
         webView.scrollView.showsVerticalScrollIndicator = false
         webView.scrollView.showsHorizontalScrollIndicator = false
         webView.scrollView.backgroundColor = UIColor.white
         webView.allowsBackForwardNavigationGestures = true
-        webView.allowsLinkPreview = true
+     
+        if #available(iOS 9.0, *) {
+            webView.allowsLinkPreview = true
+            
+        }
         webView.sizeToFit()
         
         //kvo 添加进度监控
@@ -58,19 +82,26 @@ class ASWebViewController: UIViewController{
     
     lazy var progressLine:UIProgressView = {
         () -> UIProgressView in
-        let progressLine = UIProgressView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 3))
+        
+        var safeTopHeight = CGFloat(UIScreen.main.bounds.height == 812.0 ? 88.0 : 64.0)
+        if self.navigationController?.navigationBar.isTranslucent == false {
+            safeTopHeight = 0
+        }
+
+        let progressLine = UIProgressView(frame: CGRect(x: 0, y: safeTopHeight, width: UIScreen.main.bounds.size.width, height: 3))
         progressLine.trackTintColor = UIColor.clear
         progressLine.progressTintColor = self.navigationController?.navigationBar.barTintColor == UIColor.white ?  UIColor(red: 222.0/255.0, green: 222.0/255.0, blue: 222.0/255.0, alpha: 1) : self.navigationController?.navigationBar.barTintColor
         return progressLine
     }() //
     
     
-    lazy var backBarButtonItem:UIBarButtonItem = { // 返回按钮
-        () -> UIBarButtonItem in
-
-        let backButton = UIButton(type: UIButtonType.custom)
-        backButton.setImage(UIImage(named: "nav_icon_back"), for: .normal)
-        backButton.setImage(UIImage(named: "nav_icon_back"), for: .highlighted)
+    
+    lazy var backButton:UIButton = {
+        () -> UIButton in
+        
+        let backButton = UIButton(type: UIButtonType.system)
+        backButton.setImage(UIImage(named: "ASWebViewController.bundle/nav_icon_back"), for: .normal)
+        backButton.setImage(UIImage(named: "ASWebViewController.bundle/nav_icon_back"), for: .highlighted)
         backButton.addTarget(self, action: #selector(ASWebViewController.backBarItemClicked), for: .touchUpInside)
         backButton.setTitle(" 返回", for: .normal)
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.left;
@@ -81,20 +112,27 @@ class ASWebViewController: UIViewController{
             backButton.contentEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0)
         }
         backButton.clipsToBounds = false
-        let backBarButtonItem = UIBarButtonItem(customView: backButton)
-        
+        return backButton
+    }() //
+    
+    lazy private var backBarButtonItem:UIBarButtonItem = { // 返回按钮
+        () -> UIBarButtonItem in
+        let backBarButtonItem = UIBarButtonItem(customView: self.backButton)
         return backBarButtonItem
     }() //
     
-    lazy var closeBarButtonItem:UIBarButtonItem = { // 关闭按钮
+    lazy private var closeBarButtonItem:UIBarButtonItem = { // 关闭按钮
         () -> UIBarButtonItem in
         
-        let closeButton = UIButton(type: UIButtonType.custom)
+        let closeButton = UIButton(type: UIButtonType.system)
         closeButton.addTarget(self, action: #selector(ASWebViewController.closeBarItemClicked), for: .touchUpInside)
-        closeButton.setTitle(" 关闭 ", for: .normal)
+        closeButton.setTitle("关闭 ", for: .normal)
         closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.left;
         closeButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
         closeButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        if #available(iOS 11.0, *) {
+            closeButton.contentEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0)
+        }
         closeButton.titleLabel?.sizeToFit()
         closeButton.clipsToBounds = false
         let closeBarButtonItem = UIBarButtonItem(customView: closeButton)
@@ -120,24 +158,20 @@ class ASWebViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //        NavTranslucent = self.navigationController?.navigationBar.isTranslucent
-        //        self.navigationController?.navigationBar.isTranslucent = false
-        
+
         webView.navigationDelegate = self
         webView.uiDelegate = self
- 
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NavTranslucent = self.navigationController?.navigationBar.isTranslucent
-        self.navigationController?.navigationBar.isTranslucent = false
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isTranslucent = NavTranslucent
-        
+
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
         
@@ -165,14 +199,6 @@ extension ASWebViewController{
     func closeWebView(){
         self.closeBarItemClicked()
     }
-    
-    func useLogin(){
-
-        let cashView =  UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "ASCashViewController")
-        self.navigationController?.pushViewController(cashView, animated: true)
-        
-    }
-    
 }
 
 
@@ -185,7 +211,6 @@ extension ASWebViewController:WKScriptMessageHandler {
             
             let conentStr = String(describing: type(of: message.body))
             if !(conentStr.contains("String")){// 传入的参数 非字符串类型
-                
                 return
             }
             
@@ -193,11 +218,6 @@ extension ASWebViewController:WKScriptMessageHandler {
             if "close" == message.body as! String {
                 self.closeWebView()
             }
-            
-            if "jump_login" == message.body as! String {
-                self.useLogin()
-            }
-            
         }
     }
 }

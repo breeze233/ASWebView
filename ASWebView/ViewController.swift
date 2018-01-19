@@ -19,7 +19,27 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func baidu(_ sender: Any) {
+        
+        let WebView = ASWebViewController()
+        WebView.loadType = .LoadWebURLString
+        WebView.loadWebURLSring(URLString: "http://www.baidu.com")
+        WebView.addBottomSafeSpace = true
+//        WebView.backButton.setImage(UIImage(named: ""), for: .normal)
+//        WebView.backButton.setImage(UIImage(named: ""), for: .highlighted)
+//        WebView.backButton.setTitle("修改", for: .normal)
+        self.navigationController?.pushViewController(WebView, animated: true)
+        
+    }
+    
+    @IBAction func nativeJs(_ sender: Any) {
 
-
+        let WebView = ASWebViewController()
+        WebView.loadType = .LoadWebHTMLString
+        WebView.loadWebHTMLSring(URLString: "index.html")
+        self.navigationController?.pushViewController(WebView, animated: true)
+        
+    }
 }
 
