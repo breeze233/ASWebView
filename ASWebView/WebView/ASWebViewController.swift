@@ -30,7 +30,6 @@ class ASWebViewController: UIViewController{
         Configuration.allowsInlineMediaPlayback = true// 允许在线播放
         Configuration.processPool = WKProcessPool()// web内容处理池
         Configuration.suppressesIncrementalRendering = true// 是否支持记忆读取
-        Configuration.mediaPlaybackAllowsAirPlay = true
         if #available(iOS 9.0, *) {
             Configuration.allowsAirPlayForMediaPlayback = true
             Configuration.allowsPictureInPictureMediaPlayback = true
