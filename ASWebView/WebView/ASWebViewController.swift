@@ -147,7 +147,7 @@ class ASWebViewController: UIViewController{
         self.view.addSubview(progressLine)
         self.updateNavigationItems()
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true;
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    
     }
     
     var NavTranslucent:Bool!
@@ -161,7 +161,7 @@ class ASWebViewController: UIViewController{
 
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -174,6 +174,7 @@ class ASWebViewController: UIViewController{
 
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
     }
     
