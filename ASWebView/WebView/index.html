@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <title>Native - js 交互测试</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+            
+            
+        <script type="text/javascript">
+                
+                
+                function nativeClose() {
+                    
+                    window.webkit.messageHandlers.NativeMethod.postMessage('close');
+                    
+                };
+        
+        function nativeshard() {
+            
+            //分享
+            var dict = {"nativeKey": "shard",
+                        "shardPicture":"https://ss1.baidu.com/9vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D200/sign=9279c07baf1ea8d395227304a70b30cf/d833c895d143ad4b709031008b025aafa50f06b7.jpg",
+                        "shardTitle": "宠物",
+                        "shardDescribe": "如此是可以的对吧对吧",
+                        "shardURL": "https://www.baidu.com/s?ie=utf-8&wd=%E5%AE%A0%E7%89%A9"};
+                        
+
+        window.webkit.messageHandlers.NativeMethod.postMessage(dict);
+                        
+        };
+        function nativeGetUserId() {
+            
+            window.webkit.messageHandlers.NativeMethod.postMessage('get_userId');
+            
+        };
+        function nativeGetToken() {
+            
+            window.webkit.messageHandlers.NativeMethod.postMessage('get_token');
+            
+        };
+        function nativeIsGetData() {
+            
+            var msg = localStorage.getItem("userId");
+            
+            if(msg){
+                alert("data字段中的值为：" + msg);
+            }else{
+                alert("data字段无值！");
+            }
+            
+        };
+        function nativeLocalStorageClear() {
+            
+            localStorage.clear()
+            alert("已完成移除操作");
+            
+        }
+        
+        function nativelogin() {
+            
+            window.webkit.messageHandlers.NativeMethod.postMessage('jump_login');
+            
+        }
+            </script>
+        
+        
+</head>
+    <body>
+
+        <div>
+                <button  class="close" onClick = "nativeClose()">
+                        关闭
+                </button>
+                <button  class="close" onClick = "nativeshard()">
+                    分享
+                </button>
+                <button  class="close" onClick = "nativeGetUserId()">
+                    获取UserID
+                </button>
+                <button  class="close" onClick = "nativeGetToken()">
+                    获取Token
+                </button>
+                <button  class="close" onClick = "nativeIsGetData()">
+                    是否成功
+                </button>
+                <button  class="close" onClick = "nativeLocalStorageClear()">
+                    清除LocalStorage
+                </button>
+                <button  class="close" onClick = "nativelogin()">
+                    登录
+                </button>
+    </body>
+
+<style>
+    
+    body{
+        
+        text-align: center;
+        
+    }
+
+
+body button{
+    
+    margin-top:20px;
+    width: 120px;
+    height: 40px;
+}
+
+
+    </style>
+
+
+</html>
